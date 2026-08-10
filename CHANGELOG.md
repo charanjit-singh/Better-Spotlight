@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-08-11
+
+### Changed
+- Refresh moved out of the launcher search bar and results list; use the menu bar menu or Settings instead
+
+### Fixed
+- **Refresh Apps** silently doing nothing when a scan was already in progress; it now restarts the scan reliably
+
 ## [1.1.2] - 2026-08-11
 
 ### Added
@@ -52,7 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - macOS app icon from project logo
 - GitHub Actions release workflow with tagged semantic versions
 
-[Unreleased]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/charanjit-singh/Better-Spotlight/compare/bb10d00...v1.1.0

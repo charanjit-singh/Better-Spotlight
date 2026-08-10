@@ -149,8 +149,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let show = NSMenuItem(title: "Show Launcher (\(shortcut))", action: #selector(showLauncher), keyEquivalent: "")
         let settings = NSMenuItem(title: "Better Spotlight Settings…", action: #selector(openSettings), keyEquivalent: ",")
-        let refresh = NSMenuItem(title: "Refresh Apps", action: #selector(refreshApps), keyEquivalent: "r")
+        let refresh = NSMenuItem(
+            title: AppIndexer.shared.isIndexing ? "Refreshing Apps…" : "Refresh Apps",
+            action: #selector(refreshApps),
+            keyEquivalent: "r"
+        )
         refresh.image = NSImage(systemSymbolName: "arrow.clockwise", accessibilityDescription: "Refresh Apps")
+        refresh.isEnabled = !AppIndexer.shared.isIndexing
         let quit = NSMenuItem(title: "Quit Better Spotlight", action: #selector(quitApp), keyEquivalent: "q")
 
         for item in [show, settings, refresh, quit] {
@@ -179,7 +184,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func refreshApps() {
-        Task { @MainActor in AppIndexer.shared.refresh() }
+        Task { @MainActor in
+            await AppIndexer.shared.refreshAndWait()
+        }
     }
 
     @objc private func quitApp() {

@@ -5,7 +5,6 @@ struct SearchView: View {
     let onDismiss: () -> Void
 
     @ObservedObject private var ui = LauncherUIModel.shared
-    @ObservedObject private var indexer = AppIndexer.shared
     @State private var query = ""
     @State private var results: [AppEntry] = []
     @State private var selectedIndex = 0
@@ -75,11 +74,6 @@ struct SearchView: View {
                 reload(query: newValue)
             }
         }
-        .onChange(of: indexer.isIndexing) { _, isIndexing in
-            if !isIndexing {
-                reload(query: query)
-            }
-        }
         .background(MouseHoverGate(acceptsHover: $acceptsHover))
         .background(KeyEventHandler { key in
             handleKey(key)
@@ -98,24 +92,6 @@ struct SearchView: View {
                 .font(.system(size: 22, weight: .regular))
                 .focused($isSearchFocused)
                 .onSubmit { launchSelected() }
-
-            Button {
-                AppIndexer.shared.refresh()
-            } label: {
-                Image(systemName: "arrow.clockwise")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundStyle(.secondary)
-                    .rotationEffect(.degrees(indexer.isIndexing ? 360 : 0))
-                    .animation(
-                        indexer.isIndexing
-                            ? .linear(duration: 0.9).repeatForever(autoreverses: false)
-                            : .default,
-                        value: indexer.isIndexing
-                    )
-            }
-            .buttonStyle(.plain)
-            .help("Refresh Apps")
-            .disabled(indexer.isIndexing)
 
             if !query.isEmpty {
                 Button {
@@ -191,10 +167,6 @@ struct SearchView: View {
     private func launchSelected() {
         guard results.indices.contains(selectedIndex) else { return }
         let app = results[selectedIndex]
-        if app.isRefresh {
-            AppIndexer.shared.refresh()
-            return
-        }
         onDismiss()
         // Slight delay so the liquid dismiss can start before the app activates.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {

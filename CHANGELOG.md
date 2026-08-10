@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Install instructions no longer suggest right-click → Open, which macOS 15 removed as a Gatekeeper bypass. Documented clearing the download quarantine and the **Open Anyway** flow instead
+- Release notes now include install and Gatekeeper steps, so they are visible on the Releases page
+
 ## [1.1.0] - 2026-08-11
 
 ### Added

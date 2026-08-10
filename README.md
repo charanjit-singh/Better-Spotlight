@@ -60,8 +60,15 @@ No web search, no calculator, no file search, no clipboard history, no plugin sy
 
 1. Grab the latest `BetterSpotlight-X.Y.Z.zip` from [Releases](https://github.com/charanjit-singh/Better-Spotlight/releases/latest)
 2. Unzip and drag **Better Spotlight.app** to `/Applications`
-3. Open it. macOS will warn you it's from an unidentified developer, so **right-click → Open** the first time (see [Gatekeeper](#distribution-notes-macos-gatekeeper))
-4. A short welcome scans your apps, then hands you to Settings to pick a shortcut
+3. Clear the download quarantine, because these builds aren't notarized yet:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/Better Spotlight.app"
+```
+
+4. Open it. A short welcome scans your apps, then hands you to Settings to pick a shortcut
+
+If you skip step 3, macOS says *"Apple could not verify Better Spotlight is free of malware."* That's Gatekeeper reacting to the missing notarization, not to anything the app does. [How to get past it either way.](#apple-could-not-verify-better-spotlight)
 
 **Requirements:** macOS 26.5 or later. Universal (Apple Silicon + Intel).
 
@@ -179,16 +186,40 @@ Pushing the tag triggers [`release.yml`](.github/workflows/release.yml), which b
 
 For a local zip without CI: `./scripts/build-release.sh`.
 
-## Distribution notes (macOS Gatekeeper)
+## "Apple could not verify Better Spotlight"
 
-Release zips are **ad-hoc signed**, which is why macOS asks you to confirm on first open. Proper notarization needs a paid Apple Developer account:
+Release builds are **ad-hoc signed**, not notarized, so Gatekeeper blocks them on first launch with:
+
+> Apple could not verify "Better Spotlight" is free of malware that may harm your Mac or compromise your privacy.
+
+The signature itself is valid and the binary is exactly what [`release.yml`](.github/workflows/release.yml) built from this source. What's missing is a `$99/year` Apple Developer account to notarize it with. Two ways past it:
+
+**Clear the quarantine flag** (fastest). Your browser tags every download with `com.apple.quarantine`, and that tag is what triggers the check:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/Better Spotlight.app"
+```
+
+**Or approve it in System Settings.** Note that right-clicking → Open no longer works; Apple removed that bypass in macOS 15.
+
+1. Try to open the app, then click **Done** (not *Move to Trash*)
+2. System Settings → Privacy & Security, scroll to **Security**
+3. Click **Open Anyway** next to the message about Better Spotlight, then confirm and authenticate
+
+The button only appears after you've attempted to open the app, and it expires about an hour later. Verify the download first if you like: the release page publishes a `.sha256` next to the zip, and `shasum -a 256 -c BetterSpotlight-*.zip.sha256` checks it.
+
+### Notarizing properly
+
+If you want to ship this without the warning:
 
 1. Join the [Apple Developer Program](https://developer.apple.com/programs/)
 2. Archive with **Developer ID Application** signing
 3. Notarize with `xcrun notarytool` and staple the ticket
 4. Ship the notarized zip or DMG
 
-Login items are also more reliable from an installed `.app` than from an Xcode build. If Settings says *Waiting for approval*, enable Better Spotlight under System Settings → General → Login Items.
+### Login items
+
+Login items are more reliable from an installed `.app` than from an Xcode build. If Settings says *Waiting for approval*, enable Better Spotlight under System Settings → General → Login Items.
 
 ## License
 

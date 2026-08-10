@@ -77,7 +77,9 @@ jobs:
           pattern = rf"## \[{re.escape(version)}\].*?\n(.*?)(?=\n## |\Z)"
           match = re.search(pattern, text, flags=re.S)
           body = match.group(1).strip() if match else f"Release {version}"
-          pathlib.Path("release_notes.md").write_text(body + "\n")
+          install = pathlib.Path(".github/release-install-notes.md").read_text()
+          install = install.replace("{VERSION}", version)
+          pathlib.Path("release_notes.md").write_text(f"{body}\n\n{install}")
           PY
         env:
           VERSION: ${{ steps.version.outputs.version }}

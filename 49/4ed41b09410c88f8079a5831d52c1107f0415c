@@ -1,0 +1,32 @@
+"Better Spotlight/AppIndexer.swift"
+  s_0efbf91e76041f::t_1f7ba2b7f0d87f 82,85
+  s_0efbf91e76041f::t_1265da81a47b26 136
+  s_0efbf91e76041f::t_4040e4d53e2707 162
+  s_0efbf91e76041f::t_6a0debf4e273ed 61
+CHANGELOG.md
+  s_0efbf91e76041f::t_add95aa0078d4a 10-17
+  s_0efbf91e76041f::t_125cd8f266b3a8 63-64
+"Better Spotlight/Better_SpotlightApp.swift"
+  s_0efbf91e76041f::t_5aaeede0209362 152-156,158
+  s_0efbf91e76041f::t_3c3b1c87d66006 187-189
+"Better Spotlight.xcodeproj/project.pbxproj"
+  s_0efbf91e76041f::t_0ce680e6840f28 255,268,288,301
+VERSION
+  s_0efbf91e76041f::t_0ce680e6840f28 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "494ed41b09410c88f8079a5831d52c1107f0415c",
+  "prompts": {},
+  "sessions": {
+    "s_0efbf91e76041f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "31cca37f-d34b-415f-9208-4bd73fa6513e",
+        "model": "composer-2.5"
+      },
+      "human_author": "Charanjit Singh <charanjitdotsingh@gmail.com>"
+    }
+  }
+}

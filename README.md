@@ -1,8 +1,10 @@
-# Better Spotlight
+<p align="center">
+  <img src="logo.png" alt="Better Spotlight" width="128" height="128">
+</p>
 
-A fast macOS app launcher that does one thing: opens your apps. No web results, no definitions, no unit conversions.
+<h1 align="center">Better Spotlight</h1>
 
-![Better Spotlight](logo.png)
+<p align="center">A fast macOS app launcher that does one thing: opens your apps.<br>No web results, no definitions, no unit conversions.</p>
 
 ## Features
 

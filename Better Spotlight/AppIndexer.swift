@@ -8,6 +8,7 @@ struct AppEntry: Identifiable, Hashable, Sendable {
     let url: URL
 
     static let settingsID = "better-spotlight://settings"
+    static let refreshID = "better-spotlight://refresh"
 
     static var settings: AppEntry {
         AppEntry(
@@ -17,7 +18,17 @@ struct AppEntry: Identifiable, Hashable, Sendable {
         )
     }
 
+    static var refresh: AppEntry {
+        AppEntry(
+            id: refreshID,
+            name: "Refresh Apps",
+            url: URL(string: refreshID)!
+        )
+    }
+
     var isSettings: Bool { id == Self.settingsID }
+    var isRefresh: Bool { id == Self.refreshID }
+    var isLauncherAction: Bool { isSettings || isRefresh }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -58,7 +69,7 @@ final class AppIndexer: ObservableObject {
     }()
 
     private var searchableApps: [AppEntry] {
-        apps + [AppEntry.settings]
+        apps + [AppEntry.refresh, AppEntry.settings]
     }
 
     private init() {
@@ -124,6 +135,7 @@ final class AppIndexer: ObservableObject {
 
         var validIDs = Set(scanned.map(\.id))
         validIDs.insert(AppEntry.settingsID)
+        validIDs.insert(AppEntry.refreshID)
         UsageStore.shared.prune(keeping: validIDs)
         iconCache = iconCache.filter { validIDs.contains($0.key) }
 
@@ -137,7 +149,8 @@ final class AppIndexer: ObservableObject {
         let catalog = searchableApps
 
         guard !trimmed.isEmpty else {
-            var ranked = Array(usage.ranked(apps).prefix(max(limit - 1, 0)))
+            var ranked = Array(usage.ranked(apps).prefix(max(limit - 2, 0)))
+            ranked.append(AppEntry.refresh)
             ranked.append(AppEntry.settings)
             return ranked
         }
@@ -163,7 +176,10 @@ final class AppIndexer: ObservableObject {
         if let cached = iconCache[app.id] { return cached }
 
         let image: NSImage
-        if app.isSettings, let logo = NSImage(named: "AppLogo") {
+        if app.isRefresh,
+           let symbol = NSImage(systemSymbolName: "arrow.clockwise", accessibilityDescription: nil) {
+            image = symbol
+        } else if app.isSettings, let logo = NSImage(named: "AppLogo") {
             image = logo
         } else if app.isSettings {
             image = NSWorkspace.shared.icon(forFile: Bundle.main.bundlePath)
@@ -183,6 +199,11 @@ final class AppIndexer: ObservableObject {
     }
 
     func launch(_ app: AppEntry) {
+        if app.isRefresh {
+            refresh()
+            return
+        }
+
         if app.isSettings {
             PanelController.shared.hide()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {

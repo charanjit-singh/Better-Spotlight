@@ -150,6 +150,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let show = NSMenuItem(title: "Show Launcher (\(shortcut))", action: #selector(showLauncher), keyEquivalent: "")
         let settings = NSMenuItem(title: "Better Spotlight Settings…", action: #selector(openSettings), keyEquivalent: ",")
         let refresh = NSMenuItem(title: "Refresh Apps", action: #selector(refreshApps), keyEquivalent: "r")
+        refresh.image = NSImage(systemSymbolName: "arrow.clockwise", accessibilityDescription: "Refresh Apps")
         let quit = NSMenuItem(title: "Quit Better Spotlight", action: #selector(quitApp), keyEquivalent: "q")
 
         for item in [show, settings, refresh, quit] {

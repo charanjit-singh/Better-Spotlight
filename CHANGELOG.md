@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-08-11
+
+### Added
+- Refresh icon in the launcher search bar and **Refresh Apps** in the results list, without logging the action in frecency
+- Refresh icon on the menu bar **Refresh Apps** item
+
 ## [1.1.1] - 2026-08-11
 
 ### Fixed
@@ -46,7 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - macOS app icon from project logo
 - GitHub Actions release workflow with tagged semantic versions
 
-[Unreleased]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/charanjit-singh/Better-Spotlight/compare/bb10d00...v1.1.0
 [1.0.0]: https://github.com/charanjit-singh/Better-Spotlight/commit/bb10d00

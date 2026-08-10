@@ -1,0 +1,27 @@
+README.md
+  s_0efbf91e76041f::t_8b7768b0aea0f9 41,43
+  s_0efbf91e76041f::t_a5b71b302be381 31
+  s_0efbf91e76041f::t_ba995ef90ab5dd 7-29,33,35,37-39,45,47-53,55-78,87,91,94,96,100,102,104,110-117,120,122,124,126,128,130,132,134,136,138,140,142-143,145,147-149,152-153,156-160,163,166,168,171-175,178-181,184,187-189,191,195
+  s_0efbf91e76041f::t_a9aff5b2899cc6 106,108
+  s_0efbf91e76041f::t_08c3958f9a1415 98
+  s_0efbf91e76041f::t_a80116752791bd 30
+  s_0efbf91e76041f::t_5232b7d064fe73 32
+CHANGELOG.md
+  s_0efbf91e76041f::t_8591e42340b46d 43-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "f2edd637e81d0b66d92d4557ecff2d048421204b",
+  "prompts": {},
+  "sessions": {
+    "s_0efbf91e76041f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "31cca37f-d34b-415f-9208-4bd73fa6513e",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Charanjit Singh <charanjitdotsingh@gmail.com>"
+    }
+  }
+}

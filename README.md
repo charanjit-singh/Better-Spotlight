@@ -72,7 +72,7 @@ xattr -dr com.apple.quarantine "/Applications/Better Spotlight.app"
 
 4. Open it. A short welcome scans your apps, then hands you to Settings to pick a shortcut
 
-If you skip step 3, macOS says *"Apple could not verify Better Spotlight is free of malware."* That's Gatekeeper reacting to the missing notarization, not to anything the app does. [How to get past it either way.](#apple-could-not-verify-better-spotlight)
+If you skip step 3, macOS says *"Apple could not verify Better Spotlight is free of malware."* That's Gatekeeper reacting to the missing notarization, not to anything the app does. [Read how to get past it](#apple-could-not-verify-better-spotlight), or watch the 2-minute walkthrough: **[Fix "Apple could not verify app is free of malware"](https://www.youtube.com/watch?v=biIvAM94b98)**.
 
 **Requirements:** macOS 26.5 or later. Universal (Apple Silicon + Intel).
 
@@ -210,7 +210,17 @@ xattr -dr com.apple.quarantine "/Applications/Better Spotlight.app"
 2. System Settings → Privacy & Security, scroll to **Security**
 3. Click **Open Anyway** next to the message about Better Spotlight, then confirm and authenticate
 
-The button only appears after you've attempted to open the app, and it expires about an hour later. Verify the download first if you like: the release page publishes a `.sha256` next to the zip, and `shasum -a 256 -c BetterSpotlight-*.zip.sha256` checks it.
+The button only appears after you've attempted to open the app, and it expires about an hour later.
+
+If you'd rather see it done than read it, this walks through the same steps on someone else's app:
+
+<a href="https://www.youtube.com/watch?v=biIvAM94b98">
+  <img src="https://img.youtube.com/vi/biIvAM94b98/mqdefault.jpg" alt="Fix 'Apple could not verify app is free of malware' Mac error" width="320">
+</a>
+
+*[Fix "Apple could not verify app is free of malware"](https://www.youtube.com/watch?v=biIvAM94b98) by [Andrew Tsai's Tips](https://www.youtube.com/@andrewtsaitips), 2 minutes.*
+
+Want to check the download before trusting it? Every release publishes a `.sha256` beside the zip, so `shasum -a 256 -c BetterSpotlight-*.zip.sha256` confirms you got the file CI built.
 
 ### Notarizing properly
 

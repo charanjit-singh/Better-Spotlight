@@ -24,6 +24,10 @@
   <img alt="Free" src="https://img.shields.io/badge/price-free-black">
 </p>
 
+<p align="center">
+  <img src="screenshot.png" alt="The Better Spotlight launcher floating over an editor, showing a search field and a list of apps" width="720">
+</p>
+
 ---
 
 ## Why this exists

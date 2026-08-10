@@ -1,0 +1,22 @@
+README.md
+  s_0efbf91e76041f::t_55e477cac529f7 213-223
+  s_0efbf91e76041f::t_8b20d586ffc607 75
+.github/release-install-notes.md
+  s_0efbf91e76041f::t_b720021a108da7 15-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "2eda6a70ca7fece47710c3bed5fe345f59e53d11",
+  "prompts": {},
+  "sessions": {
+    "s_0efbf91e76041f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "31cca37f-d34b-415f-9208-4bd73fa6513e",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Charanjit Singh <charanjitdotsingh@gmail.com>"
+    }
+  }
+}

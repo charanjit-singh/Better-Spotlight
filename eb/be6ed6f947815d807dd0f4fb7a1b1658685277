@@ -1,0 +1,22 @@
+.github/workflows/ci.yml
+  s_0efbf91e76041f::t_1064f1ccd0f3b9 15
+.github/workflows/release.yml
+  s_0efbf91e76041f::t_2fafaf4ab46384 86
+  s_0efbf91e76041f::t_b9f9b34f832cd4 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "ebbe6ed6f947815d807dd0f4fb7a1b1658685277",
+  "prompts": {},
+  "sessions": {
+    "s_0efbf91e76041f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "31cca37f-d34b-415f-9208-4bd73fa6513e",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Charanjit Singh <charanjitdotsingh@gmail.com>"
+    }
+  }
+}

@@ -40,5 +40,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions release workflow with tagged semantic versions
 
 [Unreleased]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/charanjit-singh/Better-Spotlight/releases/tag/v1.0.0
+[1.1.0]: https://github.com/charanjit-singh/Better-Spotlight/compare/bb10d00...v1.1.0
+[1.0.0]: https://github.com/charanjit-singh/Better-Spotlight/commit/bb10d00

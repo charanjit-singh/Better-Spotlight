@@ -4,31 +4,78 @@
 
 <h1 align="center">Better Spotlight</h1>
 
-<p align="center">A fast macOS app launcher that does one thing: opens your apps.<br>No web results, no definitions, no unit conversions.</p>
+<p align="center">
+  <b>A launcher that just opens your apps.</b><br>
+  No web results. No definitions. No unit conversions. No ads for things you didn't ask about.
+</p>
 
-## Features
+<p align="center">
+  <a href="https://github.com/charanjit-singh/Better-Spotlight/releases/latest"><b>Download for macOS</b></a>
+  &nbsp;·&nbsp;
+  <a href="#how-its-built">How it's built</a>
+  &nbsp;·&nbsp;
+  <a href="#replacing-spotlight-with-space">Replace ⌘Space</a>
+</p>
 
-- **Apps only.** Nothing competes for the top result.
-- **Frecency ranking.** Apps you actually use rise to the top, and history for uninstalled apps is pruned automatically.
-- **Instant open.** The app list is scanned once and cached, so the launcher never scans your disk on the way up.
-- **Configurable shortcut.** `⌥Space`, `⌘Space`, `⌃Space`, or `⌘⌥Space`, with an in-app guide for taking over `⌘Space` from Spotlight.
-- **Follows your cursor.** Opens centered on whichever display the mouse is on.
-- **Starts with your Mac.** Registered as a login item so the shortcut is always live.
-- **Stays out of the way.** No Dock icon, and no menu bar icon unless you turn it on.
+<p align="center">
+  <img alt="macOS 26.5+" src="https://img.shields.io/badge/macOS-26.5%2B-black">
+  <img alt="Universal binary" src="https://img.shields.io/badge/binary-universal-black">
+  <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-black">
+  <img alt="Free" src="https://img.shields.io/badge/price-free-black">
+</p>
 
-## Requirements
+---
 
-- macOS 26.5 or later
-- Xcode 26 or later (to build from source)
+## Why this exists
 
-## Run locally
+On August 10, 2026, [@heyimgustavo](https://x.com/heyimgustavo/status/2086816084280111322) posted a video with three words:
 
-1. Open `Better Spotlight.xcodeproj`
-2. Press **⌘R**
-3. On first launch you get a short welcome that scans your apps, then hands off to Settings to pick a shortcut
-4. Open the launcher with your shortcut (default **⌥Space**)
+> **bring steve back** 😭
 
-## Using the launcher
+I replied without thinking much of it:
+
+> **Someone please make a simple "app searxh" and please make it free**
+>
+> — [@cjsingg](https://x.com/cjsingg/status/2086882646781776144)
+
+Then it kept bugging me. Spotlight used to be a box you typed three letters into to open an app. Now it answers questions nobody asked: web suggestions, dictionary definitions, unit conversions, App Store results. Every one of those is another thing that can outrank the app you were actually reaching for, which is how you end up typing a name you know by heart and still having to look at the screen to check what got selected.
+
+The thing I wanted was a text field that opens apps. That's it. So rather than wait for someone else to build it, I built it that same night and put it here for free.
+
+## What it does
+
+- **Apps only.** Nothing else competes for the top result, so the first hit is always the thing you meant.
+- **Learns what you use.** Real frecency ranking: frequency and recency combined, with a 14-day half-life. Type `s` and you get the app you open every morning, not the alphabetically luckiest one.
+- **Opens instantly.** Your app list is scanned once and cached to disk. Pressing the shortcut never touches your filesystem.
+- **Takes over ⌘Space.** Or `⌥Space`, `⌃Space`, `⌘⌥Space`, whichever you prefer. There's a guided setup for stealing `⌘Space` back from Spotlight.
+- **Follows your cursor.** Opens centered on whichever display your mouse is on, not always the "main" one.
+- **Always ready.** Registers itself as a login item so the shortcut works from the moment you log in.
+- **Invisible until called.** No Dock icon. No menu bar icon unless you ask for one.
+
+### What it deliberately doesn't do
+
+No web search, no calculator, no file search, no clipboard history, no plugin system, no marketplace, no accounts, no telemetry, no update nagging. Those all exist elsewhere. This opens apps.
+
+## Install
+
+1. Grab the latest `BetterSpotlight-X.Y.Z.zip` from [Releases](https://github.com/charanjit-singh/Better-Spotlight/releases/latest)
+2. Unzip and drag **Better Spotlight.app** to `/Applications`
+3. Open it. macOS will warn you it's from an unidentified developer, so **right-click → Open** the first time (see [Gatekeeper](#distribution-notes-macos-gatekeeper))
+4. A short welcome scans your apps, then hands you to Settings to pick a shortcut
+
+**Requirements:** macOS 26.5 or later. Universal (Apple Silicon + Intel).
+
+### Or build it yourself
+
+```bash
+git clone https://github.com/charanjit-singh/Better-Spotlight.git
+cd Better-Spotlight
+open "Better Spotlight.xcodeproj"   # then press ⌘R
+```
+
+Needs Xcode 26 or later. No package resolution, no `pod install`, no setup script. It builds.
+
+## Using it
 
 | Action | Key |
 | --- | --- |
@@ -37,114 +84,112 @@
 | Launch selected | `↩` |
 | Dismiss | `Esc`, or click outside |
 
-Search for **Better Spotlight Settings** in the launcher to open preferences. You can also enable the menu bar icon in Settings → Appearance, or double-click the app in Finder.
+Search for **Better Spotlight Settings** in the launcher itself to open preferences. You can also turn on the menu bar icon in Settings → Appearance, or just double-click the app in Finder.
 
 ## Replacing Spotlight with ⌘Space
 
-Select **Command + Space** in Settings and the setup steps appear inline under it:
+Pick **Command + Space** in Settings and the two setup steps appear inline underneath it:
 
 1. **Free the shortcut.** System Settings → Keyboard → Keyboard Shortcuts → Spotlight → uncheck *Show Spotlight search*.
-2. **Grant Accessibility.** System Settings → Privacy & Security → Accessibility → enable Better Spotlight, which lets the app capture `⌘Space` reliably.
+2. **Grant Accessibility.** System Settings → Privacy & Security → Accessibility → enable Better Spotlight.
 
-Both steps have buttons in Settings that jump straight to the right pane. Settings also shows live hotkey status so you can confirm it registered.
+Both steps have buttons that jump straight to the right settings pane, and Settings shows live hotkey status so you can confirm it actually registered. The other shortcut presets work immediately and need neither step.
 
-The other presets work immediately and need neither step.
+Why Accessibility is required for `⌘Space` and nothing else is the most interesting bug in this project, explained in [The ⌘Space problem](#the-space-problem).
+
+## How it's built
+
+16 Swift files, about 2,400 lines, zero third-party dependencies. SwiftUI for the interface, AppKit for everything macOS won't let SwiftUI do.
+
+### The launcher window
+
+It's a borderless `NSPanel` hosting a SwiftUI view, not a normal window. It sits at the assistive-technology window level so it floats above full-screen apps, joins every Space, and can take keyboard focus (`canBecomeKey`) while refusing to become the main window (`canBecomeMain`), so the app you were working in doesn't visibly lose its place. Window animations are switched off entirely, because a launcher that fades is a launcher that feels slow.
+
+Showing it computes the frame from `NSEvent.mouseLocation` and picks the screen containing the cursor, so it lands on the display you're already looking at.
+
+### Ranking
+
+Every launch is recorded, and each app's score is a sum of exponentially decayed launch events:
+
+```
+score = 10 · Σ 0.5^(days_ago / 14)      // decaying launch events
+      + log₂(lifetime_launches + 1)     // floor so old favorites survive
+      + 1 / (1 + hours_since / 24)      // tie-breaker toward fresher
+```
+
+The half-life means an app you used constantly last month quietly yields to the one you're using this week, without ever fully disappearing. History for apps you uninstall is pruned automatically, both on scan and by checking whether bundles still exist on disk.
+
+### The ⌘Space problem
+
+The genuinely annoying discovery. Registering a global hotkey on macOS is `RegisterEventHotKey`, and for `⌥Space` that's the end of it. But for `⌘Space`, Carbon returns `noErr` as if it succeeded and then **never delivers the event**, because the system holds that combination for Spotlight even after you disable it in System Settings.
+
+So `⌘Space` needs a second mechanism: a `CGEvent` tap inserted at the head of the session event stream, which requires Accessibility permission, matches the keypress itself, and swallows it so nothing downstream reacts. Both paths can fire for one physical keypress, so presses are de-duplicated with an 80ms window. `⌥Space` also stays registered as an escape hatch, which is how you get back into Settings if a shortcut experiment goes wrong.
+
+### Scanning
+
+Only the standard application directories are walked (`/Applications`, `/System/Applications`, the Cryptexes path where Apple hides Safari, and your user Applications folder), skipping descendants as soon as a `.app` is found so helper bundles nested inside apps don't pollute results. The scan runs off the main thread and reports progress; the result is cached as JSON, so this happens on first run and then only when you ask.
+
+Icons are the expensive part of a launcher, so they're loaded lazily, downscaled to 32pt, capped at 40 in memory, and thrown away when the panel hides.
+
+### Privacy
+
+There is no networking code in this app. Not disabled, not opt-out: `URLSession` doesn't appear anywhere in the source. Two JSON files in `~/Library/Application Support/Better Spotlight/` hold your app list and launch counts, and nothing leaves your machine.
 
 ## Refreshing the app list
 
-The catalog is cached at `~/Library/Application Support/Better Spotlight/apps.json` and refreshes when:
+The catalog lives at `~/Library/Application Support/Better Spotlight/apps.json` and refreshes when:
 
 - You click **Refresh Apps** in Settings (or in the menu bar menu)
-- A search result fails to launch because the app was moved or deleted
+- A result fails to launch because the app was moved or deleted, which triggers a rescan automatically
 
-Install something new and it won't appear until a refresh. Launch history lives beside it in `usage.json`.
+Install something new and it appears after a refresh. Launch history sits beside it in `usage.json`.
 
-## Replay the first-run flow (development)
+## Development
+
+### Replay the first-run flow
 
 ```bash
-./scripts/reset-first-run.sh            # also clears launch history
+./scripts/reset-first-run.sh                # also clears launch history
 ./scripts/reset-first-run.sh --keep-usage
 ```
 
-Stop the app in Xcode (⌘.) before resetting, then Run (⌘R) after. If the app is still running, macOS can write your old preferences back over the reset.
+Stop the app in Xcode (⌘.) before resetting, then Run (⌘R) after. If it's still running, macOS can write your old preferences back over the reset.
 
-## Versioning
+### Versioning
 
-This project uses [SemVer](https://semver.org): `MAJOR.MINOR.PATCH`
-
-| File / setting | Purpose |
-| --- | --- |
-| `VERSION` | Canonical marketing version |
-| `CHANGELOG.md` | Human-readable release notes |
-| Xcode `MARKETING_VERSION` | Shown in Settings / About |
-| Xcode `CURRENT_PROJECT_VERSION` | Build number |
-
-Bump version:
+[SemVer](https://semver.org), with `VERSION` as the single source of truth:
 
 ```bash
-./scripts/set-version.sh 1.1.0
+./scripts/set-version.sh 1.2.0   # updates VERSION + Xcode MARKETING_VERSION
 ```
 
-Then update `CHANGELOG.md` under `## [1.1.0]`.
+Then move your notes in `CHANGELOG.md` from `[Unreleased]` into `## [1.2.0] - YYYY-MM-DD`.
 
-## Publish a release
-
-### One-time setup
-
-1. Create a GitHub repo and push this project:
+### Cut a release
 
 ```bash
-gh repo create better-spotlight --private --source=. --remote=origin --push
-# or: git remote add origin git@github.com:YOU/better-spotlight.git && git push -u origin main
-```
-
-2. Ensure GitHub Actions is enabled for the repo.
-
-### Cut a release (recommended)
-
-1. Update `CHANGELOG.md`, moving notes from `[Unreleased]` into a new `## [X.Y.Z] - YYYY-MM-DD` section.
-2. Bump version:
-
-```bash
-./scripts/set-version.sh 1.0.1
+./scripts/set-version.sh 1.2.0
 git add VERSION CHANGELOG.md "Better Spotlight.xcodeproj/project.pbxproj"
-git commit -m "Release v1.0.1"
+git commit -m "Release v1.2.0"
 git push
+git tag v1.2.0 && git push origin v1.2.0
 ```
 
-3. Tag and push (this triggers `.github/workflows/release.yml`):
+Pushing the tag triggers [`release.yml`](.github/workflows/release.yml), which builds a Release `.app` on a macOS 26 runner, zips it, extracts the matching changelog section as release notes, and publishes the zip plus its SHA-256 to GitHub Releases. `ci.yml` builds every push to `main`.
 
-```bash
-git tag v1.0.1
-git push origin v1.0.1
-```
-
-4. GitHub Actions will:
-   - build a Release `.app`
-   - zip it as `BetterSpotlight-X.Y.Z.zip`
-   - publish a GitHub Release with changelog + zip + SHA-256
-
-### Manual local zip
-
-```bash
-./scripts/set-version.sh 1.0.1
-./scripts/build-release.sh
-open build/export
-```
+For a local zip without CI: `./scripts/build-release.sh`.
 
 ## Distribution notes (macOS Gatekeeper)
 
-The CI zip is **ad-hoc signed** for easy testing. For public distribution:
+Release zips are **ad-hoc signed**, which is why macOS asks you to confirm on first open. Proper notarization needs a paid Apple Developer account:
 
 1. Join the [Apple Developer Program](https://developer.apple.com/programs/)
-2. Archive in Xcode with **Developer ID Application** signing
-3. Notarize (`xcrun notarytool`) and staple
-4. Ship the notarized zip/DMG on GitHub Releases
+2. Archive with **Developer ID Application** signing
+3. Notarize with `xcrun notarytool` and staple the ticket
+4. Ship the notarized zip or DMG
 
-Without notarization, users may need **Right-click → Open** the first time.
-
-Login items are also more reliable from an installed `.app` than from an Xcode build. If Settings shows *Waiting for approval*, enable Better Spotlight in System Settings → General → Login Items.
+Login items are also more reliable from an installed `.app` than from an Xcode build. If Settings says *Waiting for approval*, enable Better Spotlight under System Settings → General → Login Items.
 
 ## License
 
-Private / your choice. Add a `LICENSE` before making the repo public.
+Add a `LICENSE` file before making this repo public. MIT keeps it as free as the tweet asked for.

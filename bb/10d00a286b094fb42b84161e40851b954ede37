@@ -1,0 +1,28 @@
+"Better Spotlight.xcodeproj/project.pbxproj"
+  h_08eca7ecc4bc75 1-336
+"Better Spotlight.xcodeproj/project.xcworkspace/contents.xcworkspacedata"
+  h_08eca7ecc4bc75 1-7
+"Better Spotlight.xcodeproj/xcuserdata/charanjit.xcuserdatad/xcschemes/xcschememanagement.plist"
+  h_08eca7ecc4bc75 1-14
+"Better Spotlight/Assets.xcassets/AccentColor.colorset/Contents.json"
+  h_08eca7ecc4bc75 1-11
+"Better Spotlight/Assets.xcassets/AppIcon.appiconset/Contents.json"
+  h_08eca7ecc4bc75 1-58
+"Better Spotlight/Assets.xcassets/Contents.json"
+  h_08eca7ecc4bc75 1-6
+"Better Spotlight/Better_SpotlightApp.swift"
+  h_08eca7ecc4bc75 1-17
+"Better Spotlight/ContentView.swift"
+  h_08eca7ecc4bc75 1-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "bb10d00a286b094fb42b84161e40851b954ede37",
+  "prompts": {},
+  "humans": {
+    "h_08eca7ecc4bc75": {
+      "author": "Charanjit Singh <charanjitdotsingh@gmail.com>"
+    }
+  }
+}

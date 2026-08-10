@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-08-11
+
 ### Fixed
-- Install instructions no longer suggest right-click → Open, which macOS 15 removed as a Gatekeeper bypass. Documented clearing the download quarantine and the **Open Anyway** flow instead
-- Release notes now include install and Gatekeeper steps, so they are visible on the Releases page
+- Launcher panel shadow and glass layers bleeding past rounded corners on macOS 26
+- Results list auto-scrolling on open when the cursor was already over the panel; hover is ignored until the mouse moves, and only keyboard navigation scrolls the list
+- Launcher glass tuned for readability on light backgrounds without forcing a heavy dark panel
 
 ## [1.1.0] - 2026-08-11
 
@@ -43,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - macOS app icon from project logo
 - GitHub Actions release workflow with tagged semantic versions
 
-[Unreleased]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/charanjit-singh/Better-Spotlight/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/charanjit-singh/Better-Spotlight/compare/bb10d00...v1.1.0
 [1.0.0]: https://github.com/charanjit-singh/Better-Spotlight/commit/bb10d00

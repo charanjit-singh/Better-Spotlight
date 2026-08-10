@@ -149,6 +149,8 @@ final class PanelController {
         let hosting = NSHostingView(rootView: rootView)
         hosting.frame = NSRect(x: 0, y: 0, width: panelWidth, height: panelHeight)
         hosting.autoresizingMask = [.width, .height]
+        hosting.wantsLayer = true
+        hosting.layer?.masksToBounds = false
         panel.contentView = hosting
         DebugLog.log("attached SearchView bounds=\(NSStringFromRect(hosting.bounds))")
     }

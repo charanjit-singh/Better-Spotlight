@@ -8,6 +8,8 @@ struct SearchView: View {
     @State private var query = ""
     @State private var results: [AppEntry] = []
     @State private var selectedIndex = 0
+    @State private var acceptsHover = false
+    @State private var shouldScrollToSelection = false
     @FocusState private var isSearchFocused: Bool
 
     private var morphSpring: Animation {
@@ -24,18 +26,17 @@ struct SearchView: View {
 
             if !results.isEmpty {
                 Divider()
-                    .opacity(0.22)
+                    .opacity(0.28)
                     .padding(.horizontal, 14)
 
                 resultsList
             }
         }
         .frame(width: 600)
-        // Solid material first so the UI is never an invisible glass ghost.
-        .background(.ultraThinMaterial, in: shape)
-        .glassEffect(.regular.interactive(), in: shape)
-        .overlay(shape.strokeBorder(.white.opacity(0.12), lineWidth: 1))
-        .shadow(color: .black.opacity(0.35), radius: 28, y: 12)
+        .background(shape.fill(.black.opacity(0.12)))
+        .glassEffect(.regular, in: shape)
+        .clipShape(shape)
+        .overlay(shape.strokeBorder(.primary.opacity(0.12), lineWidth: 1))
         .scaleEffect(revealed ? 1.0 : 0.96)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.top, 8)
@@ -48,6 +49,8 @@ struct SearchView: View {
         .onChange(of: ui.showToken) { _, _ in
             query = ""
             selectedIndex = 0
+            acceptsHover = false
+            shouldScrollToSelection = false
             reload(query: "")
             focusSearch()
         }
@@ -66,10 +69,12 @@ struct SearchView: View {
         }
         .onChange(of: query) { _, newValue in
             selectedIndex = 0
+            shouldScrollToSelection = true
             withAnimation(morphSpring) {
                 reload(query: newValue)
             }
         }
+        .background(MouseHoverGate(acceptsHover: $acceptsHover))
         .background(KeyEventHandler { key in
             handleKey(key)
         })
@@ -126,7 +131,8 @@ struct SearchView: View {
                             launchSelected()
                         }
                         .onHover { hovering in
-                            if hovering { selectedIndex = index }
+                            guard acceptsHover, hovering else { return }
+                            selectedIndex = index
                         }
                     }
                 }
@@ -134,8 +140,10 @@ struct SearchView: View {
                 .animation(morphSpring, value: results.map(\.id))
             }
             .frame(maxHeight: 320)
+            .scrollIndicators(.never)
             .onChange(of: selectedIndex) { _, newValue in
-                guard results.indices.contains(newValue) else { return }
+                guard shouldScrollToSelection, results.indices.contains(newValue) else { return }
+                shouldScrollToSelection = false
                 withAnimation(.easeOut(duration: 0.12)) {
                     proxy.scrollTo(results[newValue].id, anchor: .center)
                 }
@@ -170,9 +178,11 @@ struct SearchView: View {
         switch key {
         case .up:
             guard !results.isEmpty else { return }
+            shouldScrollToSelection = true
             selectedIndex = max(selectedIndex - 1, 0)
         case .down:
             guard !results.isEmpty else { return }
+            shouldScrollToSelection = true
             selectedIndex = min(selectedIndex + 1, results.count - 1)
         case .escape:
             onDismiss()
@@ -217,6 +227,85 @@ private struct AppRow: View {
         }
         .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .animation(.easeOut(duration: 0.12), value: isSelected)
+    }
+}
+
+/// Ignores hover until the cursor moves after the panel opens.
+/// Prevents the list from jumping to wherever the mouse already sits.
+private struct MouseHoverGate: NSViewRepresentable {
+    @Binding var acceptsHover: Bool
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(acceptsHover: $acceptsHover)
+    }
+
+    func makeNSView(context: Context) -> GateView {
+        let view = GateView()
+        view.coordinator = context.coordinator
+        return view
+    }
+
+    func updateNSView(_ nsView: GateView, context: Context) {
+        context.coordinator.acceptsHover = $acceptsHover
+        nsView.coordinator = context.coordinator
+        context.coordinator.syncMonitoring(acceptsHover: acceptsHover)
+    }
+
+    static func dismantleNSView(_ nsView: GateView, coordinator: Coordinator) {
+        coordinator.stop()
+    }
+
+    final class GateView: NSView {
+        weak var coordinator: Coordinator?
+
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            coordinator?.syncMonitoring(acceptsHover: coordinator?.acceptsHover.wrappedValue ?? true)
+        }
+    }
+
+    final class Coordinator {
+        var acceptsHover: Binding<Bool>
+        private var monitor: Any?
+        private var anchor: CGPoint?
+
+        init(acceptsHover: Binding<Bool>) {
+            self.acceptsHover = acceptsHover
+        }
+
+        func syncMonitoring(acceptsHover: Bool) {
+            if acceptsHover {
+                stop()
+            } else if monitor == nil {
+                start()
+            } else {
+                anchor = NSEvent.mouseLocation
+            }
+        }
+
+        func start() {
+            guard monitor == nil else { return }
+            anchor = NSEvent.mouseLocation
+            monitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged]) { [weak self] event in
+                guard let self, !self.acceptsHover.wrappedValue, let anchor = self.anchor else { return event }
+                let location = NSEvent.mouseLocation
+                let dx = location.x - anchor.x
+                let dy = location.y - anchor.y
+                if (dx * dx + dy * dy) >= 9 {
+                    self.acceptsHover.wrappedValue = true
+                    self.stop()
+                }
+                return event
+            }
+        }
+
+        func stop() {
+            if let monitor {
+                NSEvent.removeMonitor(monitor)
+                self.monitor = nil
+            }
+            anchor = nil
+        }
     }
 }
 

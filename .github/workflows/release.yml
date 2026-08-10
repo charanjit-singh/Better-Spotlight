@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Semantic version without v prefix (e.g. 1.2.3)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish
+    # macOS 26 image ships the macOS 26 SDK this project targets.
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ inputs.version }}"
+          else
+            RAW="${GITHUB_REF_NAME}"
+            VERSION="${RAW#v}"
+          fi
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid semver: $VERSION" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Select Xcode
+        run: |
+          XCODE="$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1 || true)"
+          if [[ -z "$XCODE" ]]; then
+            XCODE="$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1 || true)"
+          fi
+          if [[ -n "$XCODE" ]]; then
+            echo "Using $XCODE"
+            sudo xcode-select -s "$XCODE/Contents/Developer"
+          fi
+          xcodebuild -version
+
+      - name: Bump project version
+        run: |
+          chmod +x scripts/set-version.sh scripts/build-release.sh
+          ./scripts/set-version.sh "${{ steps.version.outputs.version }}"
+
+      - name: Build release zip
+        id: build
+        run: |
+          ./scripts/build-release.sh
+          ZIP_PATH="$(ls -1 build/export/BetterSpotlight-*.zip | head -1)"
+          test -f "$ZIP_PATH"
+          echo "zip=$ZIP_PATH" >> "$GITHUB_OUTPUT"
+          echo "sha256=$(shasum -a 256 "$ZIP_PATH" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog section
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          python3 <<'PY'
+          import pathlib, re, os
+          version = os.environ["VERSION"]
+          text = pathlib.Path("CHANGELOG.md").read_text()
+          pattern = rf"## \[{re.escape(version)}\].*?\n(.*?)(?=\n## |\Z)"
+          match = re.search(pattern, text, flags=re.S)
+          body = match.group(1).strip() if match else f"Release {version}"
+          pathlib.Path("release_notes.md").write_text(body + "\n")
+          PY
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Better Spotlight ${{ steps.version.outputs.version }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ${{ steps.build.outputs.zip }}
+            ${{ steps.build.outputs.zip }}.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

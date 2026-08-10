@@ -1,21 +1,10 @@
-//
-//  ContentView.swift
-//  Better Spotlight
-//
-//  Created by Charanjit Singh on 11/08/26.
-//
-
 import SwiftUI
 
+/// Kept for Xcode previews of the launcher chrome.
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        SearchView(onDismiss: {})
+            .frame(width: 640, height: 420)
     }
 }
 

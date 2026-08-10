@@ -1,0 +1,40 @@
+"Better Spotlight/PanelController.swift"
+  s_0efbf91e76041f::t_62a9f0f626998a 152-153
+VERSION
+  s_0efbf91e76041f::t_a1839fd84de4ed 1
+CHANGELOG.md
+  s_0efbf91e76041f::t_aaf8a0a40a5b24 49-50
+  s_0efbf91e76041f::t_7988cebea366f4 10-11,13-15
+"Better Spotlight/SearchView.swift"
+  s_0efbf91e76041f::t_b7f4665683f25e 145-146
+  s_0efbf91e76041f::t_4770e5a56eb926 251
+  s_0efbf91e76041f::t_c4b4918dd19baa 29
+  s_0efbf91e76041f::t_b4206971cd4d5f 36-37,39
+  s_0efbf91e76041f::t_1f831293331bfc 52-53
+  s_0efbf91e76041f::t_d99ef929e219dc 72,77
+  s_0efbf91e76041f::t_1cc5f557c319f3 181,185
+  s_0efbf91e76041f::t_001ec227521dd5 143
+  s_0efbf91e76041f::t_fd19982e25e8a9 242-244,248,250,254,256-264,274-283,287
+  s_0efbf91e76041f::t_76659c4e0c35c4 134-135
+  s_0efbf91e76041f::t_42c48a6740b61d 233-241,245-247,249,252-253,255,265-273,284-286,288-311
+  s_0efbf91e76041f::t_846d969f0687fa 11-12
+  s_0efbf91e76041f::t_5a5fedfe4e21c7 38
+"Better Spotlight.xcodeproj/project.pbxproj"
+  s_0efbf91e76041f::t_a1839fd84de4ed 255,268,288,301
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "be4a5a4386ce4b52a961a5c71d95405356ac8f74",
+  "prompts": {},
+  "sessions": {
+    "s_0efbf91e76041f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "31cca37f-d34b-415f-9208-4bd73fa6513e",
+        "model": "composer-2.5"
+      },
+      "human_author": "Charanjit Singh <charanjitdotsingh@gmail.com>"
+    }
+  }
+}
